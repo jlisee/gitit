@@ -55,6 +55,7 @@ module Network.Gitit.Framework (
                                )
 where
 import Safe
+import Network.Gitit.Page (pageExtension)
 import Network.Gitit.Server
 import Network.Gitit.State
 import Network.Gitit.Types
@@ -256,7 +257,7 @@ isPage s = all (`notElem` "*?") s && not (".." `isInfixOf` s) && not ("/_" `isIn
 -- does not deal with them properly, and darcs filestore disallows them.
 
 isPageFile :: FilePath -> Bool
-isPageFile f = takeExtension f == ".page"
+isPageFile f = takeExtension f == ("." ++ pageExtension)
 
 isDiscussPage :: String -> Bool
 isDiscussPage ('@':xs) = isPage xs
@@ -280,7 +281,7 @@ urlForPage page = '/' : encString False isUnescapedInURI page
 
 -- | Returns the filestore path of the file containing the page's source.
 pathForPage :: String -> FilePath
-pathForPage page = page <.> "page"
+pathForPage page = page <.> pageExtension
 
 -- | Retrieves a mime type based on file extension.
 getMimeTypeForExtension :: String -> GititServerPart String

@@ -27,6 +27,7 @@ module Network.Gitit.Layout ( defaultPageLayout
                             , uploadsAllowed
                             )
 where
+import Network.Gitit.Page (pageExtension)
 import Network.Gitit.Server
 import Network.Gitit.Framework
 import Network.Gitit.State
@@ -139,7 +140,7 @@ linkForTab tabli base' page rev ViewTab =
                       else s
   in if isDiscussPage page
         then tabli DiscussTab << anchor !
-              [href $ base' ++ urlForPage (origPage page)] << "page"
+              [href $ base' ++ urlForPage (origPage page)] << pageExtension
         else tabli ViewTab << anchor !
               [href $ base' ++ urlForPage page ++
                       case rev of

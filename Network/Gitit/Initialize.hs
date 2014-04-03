@@ -32,6 +32,7 @@ import Network.Gitit.Util (readFileUTF8)
 import Network.Gitit.Types
 import Network.Gitit.State
 import Network.Gitit.Framework
+import Network.Gitit.Page (pageExtension)
 import Network.Gitit.Plugins
 import Network.Gitit.Layout (defaultRenderPage)
 import Paths_gitit (getDataFileName)
@@ -137,9 +138,9 @@ createDefaultPages conf = do
                        RST      -> writeRST defOpts . toPandoc
                        Textile  -> writeTextile defOpts . toPandoc
 
-    welcomepath <- getDataFileName $ "data" </> "FrontPage" <.> "page"
+    welcomepath <- getDataFileName $ "data" </> "FrontPage" <.> pageExtension
     welcomecontents <- liftM converter $ readFileUTF8 welcomepath
-    helppath <- getDataFileName $ "data" </> "Help" <.> "page"
+    helppath <- getDataFileName $ "data" </> "Help" <.> pageExtension
     helpcontentsInitial <- liftM converter $ readFileUTF8 helppath
     markuppath <- getDataFileName $ "data" </> "markup" <.> show pt
     helpcontentsMarkup <- liftM converter $ readFileUTF8  markuppath
@@ -152,7 +153,7 @@ createDefaultPages conf = do
           "\n...\n\n"
     -- add front page, help page, and user's guide
     let auth = Author "Gitit" ""
-    createIfMissing fs (frontPage conf <.> "page") auth "Default front page"
+    createIfMissing fs (frontPage conf <.> pageExtension) auth "Default front page"
       $ header ++ welcomecontents
     createIfMissing fs "Help.page" auth "Default help page"
       $ header ++ helpcontents

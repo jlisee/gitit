@@ -26,6 +26,7 @@ module Main
 where
 import Network.HTTP
 import System.Environment
+import Network.Gitit.Page (pageExtension)
 import Network.URI
 import System.FilePath
 import Control.Monad
@@ -53,7 +54,7 @@ usageMessage = do
 
 expireFile :: URI -> FilePath -> IO ()
 expireFile uri file = do
-  let path' = if takeExtension file == ".page"
+  let path' = if takeExtension file == ("." ++ pageExtension)
                  then dropExtension file
                  else file
   let uri' = uri{uriPath = "/_expire/" ++ urlEncode path'}

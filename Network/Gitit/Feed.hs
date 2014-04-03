@@ -27,6 +27,7 @@ import Data.Foldable as F (concatMap)
 import Data.List (intercalate, sortBy, nub)
 import Data.Maybe (fromMaybe)
 import Data.Ord (comparing)
+import Network.Gitit.Page (pageExtension)
 import Network.URI (isUnescapedInURI, escapeURIString)
 import System.FilePath (dropExtension, takeExtension, (<.>))
 import Data.FileStore.Types (history, Author(authorName), Change(..),
@@ -70,7 +71,7 @@ generateFeed cfg generator fs mbPath = do
 -- | Get the last N days history.
 changeLog :: Integer -> FileStore -> Maybe FilePath -> UTCTime -> IO [Revision]
 changeLog days a mbPath now' = do
-  let files = F.concatMap (\f -> [f, f <.> "page"]) mbPath
+  let files = F.concatMap (\f -> [f, f <.> pageExtension]) mbPath
   let startTime = addUTCTime (fromIntegral $ -60 * 60 * 24 * days) now'
   rs <- history a files TimeRange{timeFrom = Just startTime, timeTo = Just now'}
           (Just 200) -- hard limit of 200 to conserve resources
@@ -113,7 +114,7 @@ formatFeedTime = formatTime defaultTimeLocale "%FT%TZ"
 -- so then it would be just 'escape (extract $ head rv)' without the 4 line definition
 extract :: Change -> FilePath
 extract x = dePage $ case x of {Modified n -> n; Deleted n -> n; Added n -> n}
-          where dePage f = if takeExtension f == ".page" then dropExtension f else f
+          where dePage f = if takeExtension f == ("." ++ pageExtension) then dropExtension f else f
 
 -- TODO: figure out how to create diff links in a non-broken manner
 {-

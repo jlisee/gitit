@@ -53,6 +53,7 @@ module Network.Gitit.Handlers (
                       )
 where
 import Safe
+import Network.Gitit.Page (pageExtension)
 import Network.Gitit.Server
 import Network.Gitit.Framework
 import Network.Gitit.Layout
@@ -592,7 +593,7 @@ deletePage = withData $ \(params :: Params) -> do
   let author = Author user email
   let descrip = "Deleted using web interface."
   base' <- getWikiBase
-  if pConfirm params && (file == page || file == page <.> "page")
+  if pConfirm params && (file == page || file == page <.> pageExtension)
      then do
        fs <- getFileStore
        liftIO $ delete fs file author descrip
@@ -667,7 +668,7 @@ indexPage = do
 fileListToHtml :: String -> String -> [Resource] -> Html
 fileListToHtml base' prefix files =
   let fileLink (FSFile f) | isPageFile f =
-        li ! [theclass "page"  ] <<
+        li ! [theclass pageExtension  ] <<
           anchor ! [href $ base' ++ urlForPage (prefix ++ dropExtension f)] <<
             dropExtension f
       fileLink (FSFile f) = li ! [theclass "upload"] << concatHtml

@@ -34,6 +34,7 @@ import Data.Time.Clock (UTCTime)
 import System.Time (ClockTime(..))
 import Data.Time.Clock.POSIX (posixSecondsToUTCTime)
 #endif
+import Network.Gitit.Page (pageExtension)
 import Network.Gitit.State
 import Network.Gitit.Types
 import Control.Monad
@@ -54,7 +55,7 @@ expireCachedFile file = do
 
 expireCachedPDF :: String -> IO ()
 expireCachedPDF file =
-  when (takeExtension file == ".page") $ do
+  when (takeExtension file == ("." ++ pageExtension)) $ do
     let pdfname = file ++ ".export.pdf"
     exists <- doesFileExist pdfname
     when exists $ removeFile pdfname

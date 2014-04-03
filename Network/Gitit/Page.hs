@@ -47,6 +47,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 module Network.Gitit.Page ( stringToPage
                           , pageToString
                           , readCategories
+                          , pageExtension
                           )
 where
 import Network.Gitit.Types
@@ -190,3 +191,7 @@ hGetLinesTill h end = do
      else do
        rest <- hGetLinesTill h end
        return (toString next:rest)
+
+-- | The extension that a page should end with
+pageExtension :: String
+pageExtension = "page"
